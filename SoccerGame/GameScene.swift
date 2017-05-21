@@ -17,6 +17,11 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        self.ball = self.childNode(withName: "ball") as? SKLabelNode
+        if let ball = self.ball {
+            ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.fontSize/2)
+        }
+        
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
         if let label = self.label {
