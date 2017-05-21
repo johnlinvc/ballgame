@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
@@ -21,11 +21,15 @@ class GameScene: SKScene {
         self.ball = self.childNode(withName: "ball") as? SKLabelNode
         if let ball = self.ball {
             ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.fontSize/2)
+            ball.physicsBody?.contactTestBitMask = 1
         }
         
         if let ground = self.childNode(withName: "ground") as? SKShapeNode {
             ground.physicsBody = SKPhysicsBody(edgeLoopFrom: ground.path!)
+            ground.physicsBody?.contactTestBitMask = 1
         }
+        
+        self.physicsWorld.contactDelegate = self
         
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
@@ -87,6 +91,7 @@ class GameScene: SKScene {
         
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+            label.text = "Score: \(score)"
         }
         
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
@@ -104,6 +109,13 @@ class GameScene: SKScene {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        score = 0
+        if let label = self.label {
+            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+            label.text = "Score: \(score)"
+        }
+    }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
