@@ -22,6 +22,10 @@ class GameScene: SKScene {
             ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.fontSize/2)
         }
         
+        if let ground = self.childNode(withName: "ground") as? SKShapeNode {
+            ground.physicsBody = SKPhysicsBody(edgeLoopFrom: ground.path!)
+        }
+        
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
         if let label = self.label {
