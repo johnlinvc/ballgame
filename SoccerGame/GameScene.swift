@@ -14,6 +14,7 @@ class GameScene: SKScene {
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     private var ball : SKLabelNode?
+    private var score : Int = 0
     
     override func didMove(to view: SKView) {
         
@@ -73,6 +74,16 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if let ball = self.ball {
+            for t in touches {
+                let location  = t.location(in: self)
+                if ball.contains(location) {
+                    ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 1000))
+                }
+            }
+        }
+        
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
         }
