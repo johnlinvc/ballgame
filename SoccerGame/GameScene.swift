@@ -79,6 +79,7 @@ class GameScene: SKScene {
             for t in touches {
                 let location  = t.location(in: self)
                 if ball.contains(location) {
+                    score += 1
                     ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 1000))
                 }
             }
