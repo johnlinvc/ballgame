@@ -107,6 +107,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
+        guard contact.bodyA.node?.name == "ground" || contact.bodyB.node?.name == "ground" else {
+            return
+        }
         score = 0
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
