@@ -21,16 +21,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.ball = self.childNode(withName: "ball") as? SKLabelNode
         if let ball = self.ball {
             ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.fontSize/2)
-            ball.physicsBody?.contactTestBitMask = 1
+            ball.physicsBody?.contactTestBitMask=1
         }
         
-        if let ground = self.childNode(withName: "ground") as? SKShapeNode {
-            ground.physicsBody = SKPhysicsBody(edgeLoopFrom: ground.path!)
-            ground.physicsBody?.contactTestBitMask = 1
-        }
         
         self.physicsWorld.contactDelegate = self
-        
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
         if let label = self.label {
@@ -84,14 +79,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let location  = t.location(in: self)
                 if ball.contains(location) {
                     score += 1
-                    ball.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 1000))
+                    let diffX = location.x - ball.frame.origin.x - ball.frame.size.width/2
+                    print(diffX)
+                    ball.physicsBody?.applyImpulse(CGVector(dx: -5 * diffX, dy: 1000))
                 }
             }
         }
         
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-            label.text = "Score: \(score)"
+            label.text = "\(score)"
         }
         
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
@@ -113,8 +110,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score = 0
         if let label = self.label {
             label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-            label.text = "Score: \(score)"
+            label.text = "\(score)"
         }
+
     }
     
     override func update(_ currentTime: TimeInterval) {
